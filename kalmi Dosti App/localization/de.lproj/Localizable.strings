@@ -1,0 +1,9 @@
+/* 
+  Localizable.strings
+  kalmi Dosti App
+
+  Created by kirti rawat on 23/03/25.
+  
+*/
+
+"ContentView.WelcomeMessage" = "Guten Morgen, %@!";

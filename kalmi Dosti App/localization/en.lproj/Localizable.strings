@@ -1,0 +1,27 @@
+/* 
+  Localizable.strings
+  kalmi Dosti App
+
+  Created by kirti rawat on 23/03/25.
+  
+*/
+"ContentView.WelcomeMessage" = "Good morning, %@!";
+"Onboarding.KalmiDosti" = "Kalmi Dosti";
+"Get.Started" = "Get Started";
+"A.virtual.friend" = "A virtual friend ready to understand, and support you\non your journey";
+"welcome.to.luca" = "Welcome to Luca, a\ngreat friend to chat\nwith.";
+"Next" = "Next";
+"if.you.are.confuse" = "If you are confuse\nabout anything, Luca\nwill help you.";
+"luca.will.be.ready" = "Luca will be ready to\nchat 24/7 and make\nyou happy";
+"login.to.your" = "Login to your account";
+"Username" = "Username";
+"Password" = "Password";
+"Login" = "Login";
+"Don't.have.any" = "Don't have any account?";
+"Register" = "Register";
+"create.your.account" = "Create your account";
+"Email" = "Email";
+"Confirm.Password" = "Confirm Password";
+"by.registering" = "By registering you are agreeing to our\nTerms of use and privacy policy.";
+"already.have.account" = "Already have an Account?";
+
