@@ -10,6 +10,8 @@ import SwiftUI
 struct ConfuseAbout: View {
 
     @State private var currentIndex = 1
+    @State private var goToNext = false
+    @State private var goToLogin = false
 
     var body: some View {
         ZStack {
@@ -36,12 +38,18 @@ struct ConfuseAbout: View {
                 CustomPageControl(total: 3, selectedIndex: currentIndex)
                     .padding(.top, 32)
                 CustomButton(title: "Next", backgroundColor: .faceB5) {
+                    goToNext = true
                     print("Login tapped")
                 }.padding(.top, 20)
+                
+                NavigationLink(
+                    "", destination: ReadyToChat(), isActive: $goToNext
+                )
+                
                 HStack(spacing: 0) {
                     Spacer()
                     Button(action: {
-                        // Skip action
+                        goToLogin = true
                     }) {
                         Text("<Skip>")
                             .winkySans(size: 13, weight: 500, color: .black)
@@ -49,15 +57,17 @@ struct ConfuseAbout: View {
                     .padding(.trailing, 20)
                     .padding(.bottom, 20)
                     .padding(.top, 8)
-
+                    NavigationLink(
+                        "", destination: Login(), isActive: $goToLogin
+                    )
                 }
 
             }.padding(.horizontal, 44)
-        }
+        }.hideNavBar()
 
     }
 }
 
-#Preview {
-    ConfuseAbout()
-}
+//#Preview {
+//    ConfuseAbout()
+//}

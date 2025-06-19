@@ -38,3 +38,12 @@ extension View {
         clipShape( RoundedCorner(radius: radius, corners: corners) )
     }
 }
+
+//hide nav bar back button also ext
+extension View {
+    func hideNavBar() -> some View {
+        self
+            .navigationBarBackButtonHidden(true)
+            .navigationBarHidden(true)
+    }
+}

@@ -11,6 +11,9 @@ struct Login: View {
 
     @State private var username = ""
     @State private var password = ""
+   // var onLoginSuccess: () -> Void
+    @State private var goToRegister = false
+    @State private var goToHome = false
 
     var body: some View {
         ZStack {
@@ -51,6 +54,7 @@ struct Login: View {
                 }.padding(.top, 44)
                 CustomButton(title: "Login", backgroundColor: .faceB5) {
                     print("Login tapped")
+                    goToHome = true
                 }
                 .padding(.top, 36)
                 .padding(.horizontal, 20)
@@ -61,6 +65,7 @@ struct Login: View {
                         .winkySans(size: 14, weight: 400, color: .black)
 
                     Button(action: {
+                        goToRegister = true
 
                     }) {
                         Text("Register")
@@ -68,6 +73,15 @@ struct Login: View {
                             .underline()
                     }
                     .padding(.trailing, 20)
+
+                    NavigationLink(
+                        "", destination: Register(), isActive: $goToRegister
+                    )
+                    
+                    NavigationLink(
+                        "", destination: Home(), isActive: $goToHome
+                    )
+                    .hidden()
 
                 }.padding(.top, 11)
 
@@ -78,11 +92,11 @@ struct Login: View {
                     .multilineTextAlignment(.center)
 
             }.padding(.horizontal, 24)
-        }
+        }.hideNavBar()
 
     }
 }
 
-#Preview {
-    Login()
-}
+//#Preview {
+//    Login()
+//}

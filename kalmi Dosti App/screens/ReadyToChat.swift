@@ -10,6 +10,8 @@ import SwiftUI
 struct ReadyToChat: View {
 
     @State private var currentIndex = 2
+    @State private var goToNext = false
+    @State private var goToLogin = false
 
     var body: some View {
         ZStack {
@@ -36,12 +38,19 @@ struct ReadyToChat: View {
                 CustomPageControl(total: 3, selectedIndex: currentIndex)
                     .padding(.top, 32)
                 CustomButton(title: "Next", backgroundColor: .faceB5) {
+                    goToNext = true
                     print("Login tapped")
                 }.padding(.top, 20)
+                
+                NavigationLink(
+                    "", destination: Login(), isActive: $goToNext
+                )
+                .hidden()
+                
                 HStack(spacing: 0) {
                     Spacer()
                     Button(action: {
-                        // Skip action
+                        goToNext = true
                     }) {
                         Text("<Skip>")
                             .winkySans(size: 13, weight: 500, color: .black)
@@ -49,15 +58,15 @@ struct ReadyToChat: View {
                     .padding(.trailing, 20)
                     .padding(.bottom, 20)
                     .padding(.top, 8)
-
+                   
                 }
 
             }.padding(.horizontal, 44)
-        }
+        }.hideNavBar()
 
     }
 }
 
-#Preview {
-    ReadyToChat()
-}
+//#Preview {
+//    ReadyToChat()
+//}

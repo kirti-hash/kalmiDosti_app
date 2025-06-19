@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FloatingBottomTabBar: View {
-    @State private var selectedTab: Tab = .home
+    @Binding var selectedTab: Tab
 
     enum Tab: String {
         case home = "Home"

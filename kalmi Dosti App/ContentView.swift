@@ -1,66 +1,3 @@
-////
-////  ContentView.swift
-////  kalmi Dosti App
-////
-////  Created by kirti rawat on 17/03/25.
-////
-//
-//import SwiftUI
-//import SwiftData
-//
-//struct ContentView: View {
-//    @Environment(\.modelContext) private var modelContext
-//    @Query private var items: [Item]
-//
-//    var body: some View {
-//        NavigationSplitView {
-//            List {
-//                ForEach(items) { item in
-//                    NavigationLink {
-//                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-//                    } label: {
-//                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-//                    }
-//                }
-//                .onDelete(perform: deleteItems)
-//            }
-//            .toolbar {
-//                ToolbarItem(placement: .navigationBarTrailing) {
-//                    EditButton()
-//                }
-//                ToolbarItem {
-//                    Button(action: addItem) {
-//                        Label("Add Item", systemImage: "plus")
-//                    }
-//                }
-//            }
-//        } detail: {
-//            Text("Select an item")
-//        }
-//    }
-//
-//    private func addItem() {
-//        withAnimation {
-//            let newItem = Item(timestamp: Date())
-//            modelContext.insert(newItem)
-//        }
-//    }
-//
-//    private func deleteItems(offsets: IndexSet) {
-//        withAnimation {
-//            for index in offsets {
-//                modelContext.delete(items[index])
-//            }
-//        }
-//    }
-//}
-//
-//#Preview {
-//    ContentView()
-//        .modelContainer(for: Item.self, inMemory: true)
-//}
-
-
 //
 //  ContentView.swift
 //  kalmi Dosti App
@@ -74,13 +11,38 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
+    @State private var isLoggedIn = false
+       @State private var showSplash = true
 
     var body: some View {
-        Splash()
+        NavigationStack {
+                    if showSplash {
+                        Splash()
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    // Check login state or move to auth
+                                    showSplash = false
+                                    isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
+                                }
+                            }
+                    } else {
+                        if isLoggedIn {
+                            Home(
+//                                onLogout: {
+//                                isLoggedIn = false
+//                                UserDefaults.standard.set(false, forKey: "isLoggedIn")
+//                            }
+                            )
+                        } else {
+                            Welcome(onLoginSuccess: {
+                                isLoggedIn = true
+                                UserDefaults.standard.set(true, forKey: "isLoggedIn")
+                            })
+                        }
+                    }
+        }.toolbar(.hidden, for: .automatic )
     }
 }
 
-//#Preview {
-//    ContentView()
-//        .modelContainer(for: Item.self, inMemory: true)
-//}
+
+

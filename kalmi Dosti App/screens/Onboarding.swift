@@ -33,10 +33,10 @@ struct Onboarding: View {
                     .multilineTextAlignment(.center)
 
             }.padding(.horizontal, 20)
-        }
+        }.hideNavBar()
 
     }
 }
-#Preview {
-    Onboarding()
-}
+//#Preview {
+//    Onboarding()
+//}

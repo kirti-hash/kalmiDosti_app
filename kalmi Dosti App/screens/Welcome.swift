@@ -10,7 +10,11 @@ import SwiftUI
 struct Welcome: View {
 
     @State private var currentIndex = 0
-
+    var onLoginSuccess: () -> Void
+    @State private var goToNext = false
+    @State private var goToLogin = false
+    
+    
     var body: some View {
         ZStack {
             LinearGradient(
@@ -37,11 +41,18 @@ struct Welcome: View {
                     .padding(.top, 32)
                 CustomButton(title: "Next", backgroundColor: .faceB5) {
                     print("Login tapped")
+                    goToNext = true
                 }.padding(.top, 20)
+                
+                NavigationLink(
+                    "", destination: ConfuseAbout(), isActive: $goToNext
+                )
+                .hidden()
+                
                 HStack(spacing: 0) {
                     Spacer()
                     Button(action: {
-                        // Skip action
+                        goToLogin = true
                     }) {
                         Text("<Skip>")
                             .winkySans(size: 13, weight: 500, color: .black)
@@ -49,15 +60,18 @@ struct Welcome: View {
                     .padding(.trailing, 20)
                     .padding(.bottom, 20)
                     .padding(.top, 8)
-
+                    NavigationLink(
+                        "", destination: Login(), isActive: $goToLogin
+                    )
+                    .hidden()
                 }
 
             }.padding(.horizontal, 44)
-        }
+        }.hideNavBar()
 
     }
 }
 
-#Preview {
-    Welcome()
-}
+//#Preview {
+//    Welcome()
+//}
