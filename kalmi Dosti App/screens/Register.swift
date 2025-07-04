@@ -15,6 +15,8 @@ struct Register: View {
     @State private var confirmPassword = ""
     @State private var goToLogin = false
     @State private var goToHome = false
+    @State private var showAlert = false
+    @State private var alertMessage = ""
 
     var body: some View {
         ZStack {
@@ -78,11 +80,45 @@ struct Register: View {
 
                 Spacer()
                 CustomButton(title: "Register", backgroundColor: .faceB5) {
-                    print("Login tapped")
-                    goToHome = true
+                    // Check for empty fields
+                       if username.isEmpty || password.isEmpty || email.isEmpty || confirmPassword.isEmpty {
+                           alertMessage = "All fields are required."
+                           showAlert = true
+                           return
+                       }
+
+                       // Username validation (only letters and special characters)
+                       let usernameRegex = "^[A-Za-z!@#$%^&*()_+=\\[\\]{}|:;\"'<>,.?/-]+$"
+                       if !NSPredicate(format: "SELF MATCHES %@", usernameRegex).evaluate(with: username) {
+                           alertMessage = "Username can only contain alphabets and special characters."
+                           showAlert = true
+                           return
+                       }
+
+                       // Email validation
+                       let emailRegex = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+                       if !NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email) {
+                           alertMessage = "Please enter a valid email address."
+                           showAlert = true
+                           return
+                       }
+
+                       // Password match
+                       if password != confirmPassword {
+                           alertMessage = "Passwords do not match."
+                           showAlert = true
+                           return
+                       }
+
+                       // ✅ All checks passed
+                       print("Register tapped")
+                   // goToHome = true
                 }
                 .padding(.top, 36)
                 .padding(.horizontal, 20)
+                .alert(isPresented: $showAlert) {
+                    Alert(title: Text("Registration Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                }
 
                 HStack(spacing: 5) {
 
@@ -90,7 +126,7 @@ struct Register: View {
                         .winkySans(size: 14, weight: 400, color: .black)
 
                     Button(action: {
-                      goToHome = true
+                        goToHome = true
                     }) {
                         Text("Login")
                             .winkySans(size: 14, weight: 500, color: .black)
@@ -98,17 +134,16 @@ struct Register: View {
                     }
                     .padding(.trailing, 20)
 
-                    
                     NavigationLink(
                         "", destination: Home(), isActive: $goToHome
                     )
                     .hidden()
-                    
+
                     NavigationLink(
                         "", destination: Login(), isActive: $goToLogin
                     )
                     .hidden()
-                    
+
                 }.padding(.top, 11)
 
             }.padding(.horizontal, 24)

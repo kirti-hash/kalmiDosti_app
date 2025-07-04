@@ -5,13 +5,17 @@
 //  Created by kirti rawat on 05/06/25.
 //
 
+import SwiftData
 import SwiftUI
 
 struct Login: View {
+    @Environment(\.modelContext) var modelContext
+    @State var username = ""
+    @State var password = ""
+    @State private var showAlert = false
+    @State private var alertMessage = ""
 
-    @State private var username = ""
-    @State private var password = ""
-   // var onLoginSuccess: () -> Void
+    // var onLoginSuccess: () -> Void
     @State private var goToRegister = false
     @State private var goToHome = false
 
@@ -54,10 +58,40 @@ struct Login: View {
                 }.padding(.top, 44)
                 CustomButton(title: "Login", backgroundColor: .faceB5) {
                     print("Login tapped")
-                    goToHome = true
+                    // Fetch users with matching credentials
+                    let descriptor = FetchDescriptor<User>(
+                        predicate: #Predicate {
+                            $0.username == username && $0.password == password
+                        }
+                    )
+
+                    do {
+                        let existingUsers = try modelContext.fetch(descriptor)
+
+                        if existingUsers.first != nil {
+                            // User exists → go to Home
+                            goToHome = true
+                        } else {
+                            // No matching user → Show alert
+                            alertMessage =
+                                "User does not exist please register to continue"
+                            showAlert = true
+                        }
+                    } catch {
+                        alertMessage =
+                            "Error checking login: \(error.localizedDescription)"
+                        showAlert = true
+                    }
+
                 }
                 .padding(.top, 36)
                 .padding(.horizontal, 20)
+                .alert(isPresented: $showAlert) {
+                    Alert(
+                        title: Text("Login Failed"),
+                        message: Text(alertMessage),
+                        dismissButton: .default(Text("OK")))
+                }
 
                 HStack(spacing: 5) {
 
@@ -72,12 +106,12 @@ struct Login: View {
                             .winkySans(size: 14, weight: 500, color: .black)
                             .underline()
                     }
-                    .padding(.trailing, 20)
+ .padding(.trailing, 20)
 
                     NavigationLink(
                         "", destination: Register(), isActive: $goToRegister
                     )
-                    
+
                     NavigationLink(
                         "", destination: Home(), isActive: $goToHome
                     )

@@ -61,26 +61,26 @@ struct Home: View {
 
             VStack(spacing: 0) {
 
-                ZStack(alignment:  .bottomLeading ) {
+                ZStack(alignment: .bottomLeading) {
 
                     Color.themeGreen
                         .frame(height: 179)
                         .cornerRadius(48, corners: [.bottomLeft, .bottomRight])
-                    
+
                     HStack(alignment: .center, spacing: 17) {
-                        
-                        if  selectedTab == .home {
+
+                        if selectedTab == .home {
                             Image("user")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 54, height: 54)
-                            
+
                             Text("Hi, Sara")
                                 .winkySans(
                                     size: 36, weight: 400, color: .black
                                 )
-                            
-                        }else {
+
+                        } else {
                             Spacer()
                             Text("Profile")
                                 .winkySans(
@@ -94,11 +94,8 @@ struct Home: View {
 
                 }
 
-                
-
                 VStack(spacing: 16) {
 
-                    
                     if selectedTab == .home {
                         Spacer()
                         ForEach(items) { item in
@@ -150,14 +147,16 @@ struct Home: View {
                                         size: 15, weight: 500, color: .black
                                     )
                                     .padding(.trailing, 30)
-                                
+
                                 Button(action: {
                                     // Handle action here (e.g., show modal, toggle view, etc.)
                                     print("Edit Profile tapped")
                                     goToEditProfile = true
                                 }) {
                                     Text("Edit Profile")
-                                        .winkySans(size: 15, weight: 400, color: .black)
+                                        .winkySans(
+                                            size: 15, weight: 400, color: .black
+                                        )
                                         .padding(.horizontal, 20)
                                         .padding(.vertical, 12)
                                         .background(Color.faceB5)
@@ -165,9 +164,10 @@ struct Home: View {
                                 }
                                 .padding(10)
                                 .shadow(radius: 2)
-     
+
                                 NavigationLink(
-                                    "", destination: EditProfile(), isActive: $goToEditProfile
+                                    "", destination: EditProfile(),
+                                    isActive: $goToEditProfile
                                 )
                             }
                             Spacer()
