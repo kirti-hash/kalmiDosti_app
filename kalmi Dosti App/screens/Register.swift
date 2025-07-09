@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct Register: View {
 
@@ -17,6 +18,7 @@ struct Register: View {
     @State private var goToHome = false
     @State private var showAlert = false
     @State private var alertMessage = ""
+    @Environment(\.modelContext) var modelContext
 
     var body: some View {
         ZStack {
@@ -110,9 +112,30 @@ struct Register: View {
                            return
                        }
 
-                       // ✅ All checks passed
-                       print("Register tapped")
-                   // goToHome = true
+                    // ✅ Check if user already exists
+                        let descriptor = FetchDescriptor<User>(
+                            predicate: #Predicate { $0.email == email }
+                        )
+
+                        do {
+                            let existingUsers = try modelContext.fetch(descriptor)
+                            if !existingUsers.isEmpty {
+                                alertMessage = "User already exists. Please login instead."
+                                showAlert = true
+                                return
+                            }
+                        } catch {
+                            alertMessage = "Error checking existing users: \(error.localizedDescription)"
+                            showAlert = true
+                            return
+                        }
+
+                        // ✅ All checks passed → Save user
+                        let newUser = User(username: username, email: email, password: password)
+                        modelContext.insert(newUser)
+                        UserDefaults.standard.set(newUser.email, forKey: "loggedInEmail")
+                        goToHome = true
+                    
                 }
                 .padding(.top, 36)
                 .padding(.horizontal, 20)
@@ -133,16 +156,19 @@ struct Register: View {
                             .underline()
                     }
                     .padding(.trailing, 20)
+                    .navigationDestination(
+                        isPresented: $goToHome
+                    ) {
+                        Home()
+                        Text("")
+                            .hidden()
+                    }
+                    
 
-                    NavigationLink(
-                        "", destination: Home(), isActive: $goToHome
-                    )
-                    .hidden()
-
-                    NavigationLink(
-                        "", destination: Login(), isActive: $goToLogin
-                    )
-                    .hidden()
+//                    NavigationLink(
+//                        "", destination: Login(), isActive: $goToLogin
+//                    )
+//                    .hidden()
 
                 }.padding(.top, 11)
 
@@ -152,6 +178,3 @@ struct Register: View {
     }
 }
 
-//#Preview {
-//    Register()
-//}

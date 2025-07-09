@@ -41,11 +41,14 @@ struct ConfuseAbout: View {
                     goToNext = true
                     print("Login tapped")
                 }.padding(.top, 20)
-                
-                NavigationLink(
-                    "", destination: ReadyToChat(), isActive: $goToNext
-                )
-                
+                    .navigationDestination(
+                        isPresented: $goToNext
+                    ) {
+                        ReadyToChat()
+                        Text("")
+                            .hidden()
+                    }
+
                 HStack(spacing: 0) {
                     Spacer()
                     Button(action: {
@@ -57,9 +60,14 @@ struct ConfuseAbout: View {
                     .padding(.trailing, 20)
                     .padding(.bottom, 20)
                     .padding(.top, 8)
-                    NavigationLink(
-                        "", destination: Login(), isActive: $goToLogin
-                    )
+                    .navigationDestination(
+                        isPresented: $goToLogin
+                    ) {
+                        Login()
+                        Text("")
+                            .hidden()
+                    }
+
                 }
 
             }.padding(.horizontal, 44)
@@ -67,7 +75,3 @@ struct ConfuseAbout: View {
 
     }
 }
-
-//#Preview {
-//    ConfuseAbout()
-//}

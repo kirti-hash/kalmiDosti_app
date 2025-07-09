@@ -44,7 +44,6 @@ struct CustomModalView: View {
                     .padding(.horizontal, 16)
                     .background(Color.white)
                     .cornerRadius(18)
-                    
 
                     Button("Save") {
                         onSave()
@@ -61,8 +60,7 @@ struct CustomModalView: View {
             .background(Color.themeGreenDark)
             .cornerRadius(16)
             .padding(.horizontal, 40)
-            
+
         }
     }
 }
-

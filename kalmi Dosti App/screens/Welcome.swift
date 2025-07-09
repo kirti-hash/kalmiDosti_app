@@ -13,8 +13,7 @@ struct Welcome: View {
     var onLoginSuccess: () -> Void
     @State private var goToNext = false
     @State private var goToLogin = false
-    
-    
+
     var body: some View {
         ZStack {
             LinearGradient(
@@ -43,12 +42,14 @@ struct Welcome: View {
                     print("Login tapped")
                     goToNext = true
                 }.padding(.top, 20)
-                
-                NavigationLink(
-                    "", destination: ConfuseAbout(), isActive: $goToNext
-                )
-                .hidden()
-                
+                    .navigationDestination(
+                        isPresented: $goToNext
+                    ) {
+                        ConfuseAbout()
+                        Text("")
+                            .hidden()
+                    }
+
                 HStack(spacing: 0) {
                     Spacer()
                     Button(action: {
@@ -60,10 +61,17 @@ struct Welcome: View {
                     .padding(.trailing, 20)
                     .padding(.bottom, 20)
                     .padding(.top, 8)
-                    NavigationLink(
-                        "", destination: Login(), isActive: $goToLogin
-                    )
-                    .hidden()
+                    .navigationDestination(
+                        isPresented: $goToLogin
+                    ) {
+                        Login()
+                        Text("")
+                            .hidden()
+                    }
+                    //                                        NavigationLink(
+                    //                                            "", destination: Login(), isActive: $goToLogin
+                    //                                        )
+                    //                                        .hidden()
                 }
 
             }.padding(.horizontal, 44)
@@ -71,7 +79,3 @@ struct Welcome: View {
 
     }
 }
-
-//#Preview {
-//    Welcome()
-//}

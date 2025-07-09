@@ -10,7 +10,7 @@ import SwiftUI
 
 struct Login: View {
     @Environment(\.modelContext) var modelContext
-    @State var username = ""
+    @State var email = ""
     @State var password = ""
     @State private var showAlert = false
     @State private var alertMessage = ""
@@ -38,10 +38,10 @@ struct Login: View {
 
                 VStack(spacing: 12) {
                     CustomTextField(
-                        imageName: "username",
-                        placeholder: "Username",
-                        text: $username,
-                        keyboardType: .default,
+                        imageName: "email",
+                        placeholder: "Email",
+                        text: $email,
+                        keyboardType: .emailAddress,
                         backgroundColor: Color.white65
 
                     )
@@ -61,7 +61,7 @@ struct Login: View {
                     // Fetch users with matching credentials
                     let descriptor = FetchDescriptor<User>(
                         predicate: #Predicate {
-                            $0.username == username && $0.password == password
+                            $0.email == email && $0.password == password
                         }
                     )
 
@@ -71,6 +71,7 @@ struct Login: View {
                         if existingUsers.first != nil {
                             // User exists → go to Home
                             goToHome = true
+                            UserDefaults.standard.set(existingUsers.first?.email, forKey: "loggedInEmail")
                         } else {
                             // No matching user → Show alert
                             alertMessage =
@@ -106,16 +107,20 @@ struct Login: View {
                             .winkySans(size: 14, weight: 500, color: .black)
                             .underline()
                     }
- .padding(.trailing, 20)
-
-                    NavigationLink(
-                        "", destination: Register(), isActive: $goToRegister
-                    )
-
-                    NavigationLink(
-                        "", destination: Home(), isActive: $goToHome
-                    )
-                    .hidden()
+                    .padding(.trailing, 20)
+                    .navigationDestination(
+                        isPresented: $goToRegister
+                    ) {
+                        Register()
+                        Text("")
+                            .hidden()
+                    }
+                    
+                  
+//                    NavigationLink(
+//                        "", destination: Home(), isActive: $goToHome
+//                    )
+//                    .hidden()
 
                 }.padding(.top, 11)
 
@@ -131,6 +136,3 @@ struct Login: View {
     }
 }
 
-//#Preview {
-//    Login()
-//}

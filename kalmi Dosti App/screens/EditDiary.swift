@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct EditDiary: View {
 
@@ -15,6 +16,8 @@ struct EditDiary: View {
     @State private var showDeleteModal = false
     @State private var showSaveModal = false
     @Environment(\.dismiss) var dismiss
+    @Environment(\.modelContext) private var modelContext
+    @Query var users: [User]
    
 
     var body: some View {
@@ -54,35 +57,16 @@ struct EditDiary: View {
                         .multilineTextAlignment(.leading)
                         .padding(.top, 40)
                         .padding(.horizontal, 18)
-                        .onChange(of: pageTitle) { newValue in
+                        .onChange(of: pageTitle) { oldValue, newValue in
                             // Enforce character limit while typing
                             if newValue.count > characterLimit {
                                 pageTitle = String(
                                     newValue.prefix(characterLimit))
                             }
                         }
-                    //                        .onPasteCommand(of: [.plainText]) { items in
-                    //            // Handle paste event and enforce character limit
-                    //                            if let pastedText = items. {
-                    //                let newText = pageTitle + pastedText
-                    //                if newText.count > characterLimit {
-                    //        // Limit the pasted content to fit within the character limit
-                    //            pageTitle = String(newText.prefix(characterLimit))
-                    //                } else {
-                    //                pageTitle = newText
-                    //                                }
-                    //                            }
-                    //                        }
-
-                    //                    Text("\(pageTitle.count)/\(characterLimit) characters") // Optional: Shows character count
-                    //                                    .font(.footnote)
-                    //                                    .foregroundColor(pageTitle.count > characterLimit ? .red : .gray)
-                    //                                    .padding(.top, 5)
-
                     Rectangle()
                         .frame(height: 2)
                         .foregroundColor(.themeGreenDark)
-                    // Journal body input
 
                     TextField(
                         "Type Something...", text: $journalText, axis: .vertical
@@ -111,8 +95,12 @@ struct EditDiary: View {
                         showDeleteModal = false
                     },
                     onDismiss: {
+                        pageTitle = ""
+                        journalText = ""
                         showDeleteModal = false
+                        dismiss()
                     }
+                   
                 )
             }
 
@@ -125,8 +113,28 @@ struct EditDiary: View {
                         showSaveModal = false
                     },
                     onSave: {
-                        print("Saved")
+                        if pageTitle.trimmingCharacters(in: .whitespaces).isEmpty &&
+                            journalText.trimmingCharacters(in: .whitespaces).isEmpty {
+                            showSaveModal = false
+                            return
+                        }
+
+                        if let currentUser = users.first(where: {
+                            $0.email == UserDefaults.standard.string(forKey: "loggedInEmail")
+                        }) {
+                            let newEntry = Journal(title: pageTitle, summary: journalText)
+                            currentUser.diary.append(newEntry)
+
+                            do {
+                                try modelContext.save()
+                                print("Saved journal")
+                            } catch {
+                                print("Error saving: \(error)")
+                            }
+                        }
+
                         showSaveModal = false
+                      //  dismiss()
                     },
                     onDismiss: {
                         showSaveModal = false
@@ -139,6 +147,4 @@ struct EditDiary: View {
     }
 
 }
-//#Preview {
-//    EditDiary()
-//}
+

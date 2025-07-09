@@ -17,7 +17,6 @@ struct CustomButton: View {
             Text(title)
                 .winkySans(size: 24, weight: 500, color: .black)
                 .foregroundColor(.white)
-                //.padding()
                 .padding(.vertical, 10)
                 .frame(maxWidth: .infinity)
                 .background(backgroundColor)
@@ -27,6 +26,3 @@ struct CustomButton: View {
     }
 }
 
-//#Preview {
-//    CustomButton(title: "sdsd", backgroundColor: .themeGreen, action: {})
-//}

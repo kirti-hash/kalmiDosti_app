@@ -216,6 +216,3 @@ struct DateSeparator: View {
     }
 }
 
-//#Preview {
-//    Chat()
-//}

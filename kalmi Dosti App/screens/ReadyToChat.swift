@@ -41,12 +41,18 @@ struct ReadyToChat: View {
                     goToNext = true
                     print("Login tapped")
                 }.padding(.top, 20)
-                
                 NavigationLink(
                     "", destination: Login(), isActive: $goToNext
                 )
                 .hidden()
-                
+//                    .navigationDestination(
+//                        isPresented: $goToNext
+//                    ) {
+//                        Login()
+//                        Text("")
+//                            .hidden()
+//                    }
+
                 HStack(spacing: 0) {
                     Spacer()
                     Button(action: {
@@ -58,7 +64,7 @@ struct ReadyToChat: View {
                     .padding(.trailing, 20)
                     .padding(.bottom, 20)
                     .padding(.top, 8)
-                   
+
                 }
 
             }.padding(.horizontal, 44)
@@ -66,7 +72,3 @@ struct ReadyToChat: View {
 
     }
 }
-
-//#Preview {
-//    ReadyToChat()
-//}

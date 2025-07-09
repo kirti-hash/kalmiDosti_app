@@ -13,6 +13,3 @@ struct Splash: View {
     }
 }
 
-//#Preview {
-//    Splash()
-//}

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct Diary: View {
 
@@ -13,6 +14,8 @@ struct Diary: View {
     @State private var password = ""
     @Environment(\.dismiss) var dismiss
     @State private var goToNewDiary = false
+    @Query var users: [User]
+   
 
     var body: some View {
         ZStack {
@@ -38,48 +41,62 @@ struct Diary: View {
                         print("Gear tapped")
                     }
                 )
-
-                Spacer()
-
-                Image("writing")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 200, height: 200, alignment: .center)
-                Text("Create.your.first.Journal")
-                    .lexend(size: 20, weight: 400, color: .black)
-                    .padding(.top, 6)
-
-                Spacer()
-
-                HStack {
-                    Spacer()
-
-                    Button(action: {
-                        print("Plus icon tapped")
-                        goToNewDiary = true
-                    }) {
-                        Image(systemName: "plus.circle.fill")
+                if let currentUser = users.first(where: {
+                    $0.email == UserDefaults.standard.string(forKey: "loggedInEmail")
+                }) {
+                    if currentUser.diary.isEmpty {
+                        Spacer()
+                        
+                        Image("writing")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 60, height: 60)
-                            .background(Color.black)
-                            .clipShape(Circle())
-                            .foregroundStyle(Color.themeGreen)
+                            .frame(width: 200, height: 200, alignment: .center)
+                        Text("Create.your.first.Journal")
+                            .lexend(size: 20, weight: 400, color: .black)
+                            .padding(.top, 6)
+                        
+                        Spacer()
+                        
+                        HStack {
+                            Spacer()
+                            
+                            Button(action: {
+                                print("Plus icon tapped")
+                                goToNewDiary = true
+                            }) {
+                                Image(systemName: "plus.circle.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 60, height: 60)
+                                    .background(Color.black)
+                                    .clipShape(Circle())
+                                    .foregroundStyle(Color.themeGreen)
+                            }
+                            .navigationDestination(
+                                isPresented: $goToNewDiary
+                            ) {
+                                EditDiary()
+                                Text("")
+                                    .hidden()
+                            }
+                        }.padding(.horizontal, 33)
+                            .padding(.vertical, 30)
+                    } else {
+                        List(currentUser.diary) { journal in
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(journal.title)
+                                    .font(.headline)
+                                Text(journal.summary)
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
+                        }
                     }
-                    
-                    NavigationLink(
-                        "", destination: EditDiary(), isActive: $goToNewDiary
-                    )
-                    .hidden()
-                    
-                }.padding(.horizontal, 33)
-                    .padding(.vertical, 30)
-
+                }
+               
             }
+            
+
         }.hideNavBar()
     }
 }
-
-//#Preview {
-//    Diary()
-//}

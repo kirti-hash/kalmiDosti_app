@@ -83,15 +83,23 @@ struct Meditation: View {
                     .padding(.all, 20)
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 7) {
-                        
+
                         ForEach(items) { item in
-                            
+
                             HStack(spacing: 10) {
                                 Image("\(item.image)")
                                     .resizable()
                                     .frame(width: 128, height: 80)
                                     .cornerRadius(5)
-                                
+                                    .onTapGesture {
+                                        if let url = URL(
+                                            string:
+                                                "https://www.youtube.com/watch?v=xEWq8TamGNQ"
+                                        ) {
+                                            UIApplication.shared.open(url)
+                                        }
+                                    }
+
                                 VStack(alignment: .leading, spacing: 3) {
                                     Text("\(item.title)")
                                         .lexend(
@@ -99,7 +107,8 @@ struct Meditation: View {
                                         )
                                     Text("\(item.desc)")
                                         .winkySans(
-                                            size: 13, weight: 400, color: .secondary
+                                            size: 13, weight: 400,
+                                            color: .secondary
                                         )
                                 }
                                 Spacer()
@@ -110,7 +119,7 @@ struct Meditation: View {
                             .cornerRadius(10)
                             .shadow(radius: 3)
                             .padding(.horizontal, 19)
-                            
+
                         }
                     }
                 }
@@ -138,23 +147,34 @@ struct HorizontalListView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 16) {
                 ForEach(sampleCategories) { item in
-                    VStack(alignment: .leading,spacing: 4) {
+                    VStack(alignment: .leading, spacing: 4) {
                         Image(item.imageName)
                             .resizable()
                             .frame(width: 148, height: 88)
                             .cornerRadius(12)
                             .foregroundColor(.black)
-                            .padding(.bottom,6)
+                            .padding(.bottom, 6)
+                            .onTapGesture {
+                                if let url = URL(
+                                    string:
+                                        "https://en.wikipedia.org/wiki/List_of_asanas"
+                                ) {
+                                    UIApplication.shared.open(url)
+                                }
+                                
+                            }
 
                         Text(item.title)
                             .lexend(size: 13, weight: 500, color: .black)
                             .foregroundColor(.black)
                         Text("\(item.poses) poses")
-                            .lexend(size: 13, weight: 500, color: .themeGreenDark)
+                            .lexend(
+                                size: 13, weight: 500, color: .themeGreenDark
+                            )
                             .foregroundColor(.black)
                     }
                     .padding()
-                   // .frame(width: 100, height: 100)
+                    // .frame(width: 100, height: 100)
                     .background(Color.faceB5)
                     .cornerRadius(16)
                 }
@@ -165,6 +185,3 @@ struct HorizontalListView: View {
     }
 }
 
-//#Preview {
-//    Meditation()
-//}

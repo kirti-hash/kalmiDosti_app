@@ -37,6 +37,4 @@ struct Onboarding: View {
 
     }
 }
-//#Preview {
-//    Onboarding()
-//}
+
