@@ -5,11 +5,12 @@
 //  Created by kirti rawat on 17/06/25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct EditDiary: View {
 
+    var existingJournal: Journal?
     @State private var pageTitle: String = ""
     @State private var journalText: String = ""
     let characterLimit = 300
@@ -18,7 +19,13 @@ struct EditDiary: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var modelContext
     @Query var users: [User]
-   
+
+    // Custom init to prefill fields if editing
+    init(journal: Journal? = nil) {
+        self.existingJournal = journal
+        _pageTitle = State(initialValue: journal?.title ?? "")
+        _journalText = State(initialValue: journal?.summary ?? "")
+    }
 
     var body: some View {
         ZStack {
@@ -100,7 +107,7 @@ struct EditDiary: View {
                         showDeleteModal = false
                         dismiss()
                     }
-                   
+
                 )
             }
 
@@ -113,28 +120,32 @@ struct EditDiary: View {
                         showSaveModal = false
                     },
                     onSave: {
-                        if pageTitle.trimmingCharacters(in: .whitespaces).isEmpty &&
-                            journalText.trimmingCharacters(in: .whitespaces).isEmpty {
-                            showSaveModal = false
-                            return
-                        }
-
                         if let currentUser = users.first(where: {
-                            $0.email == UserDefaults.standard.string(forKey: "loggedInEmail")
+                            $0.email
+                                == UserDefaults.standard.string(
+                                    forKey: "loggedInEmail")
                         }) {
-                            let newEntry = Journal(title: pageTitle, summary: journalText)
-                            currentUser.diary.append(newEntry)
+                            if let journal = existingJournal {
+                                // Update existing journal
+                                journal.title = pageTitle
+                                journal.summary = journalText
+                                print("Updated journal")
+                            } else {
+                                // Create new journal
+                                let newEntry = Journal(
+                                    title: pageTitle, summary: journalText)
+                                currentUser.diary.append(newEntry)
+                                print("Created new journal")
+                            }
 
                             do {
                                 try modelContext.save()
                                 print("Saved journal")
+                                dismiss()
                             } catch {
                                 print("Error saving: \(error)")
                             }
                         }
-
-                        showSaveModal = false
-                      //  dismiss()
                     },
                     onDismiss: {
                         showSaveModal = false
@@ -147,4 +158,3 @@ struct EditDiary: View {
     }
 
 }
-
