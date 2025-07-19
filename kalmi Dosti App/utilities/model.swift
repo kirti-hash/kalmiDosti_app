@@ -15,12 +15,13 @@ class User {
     var email: String
     var password: String
     var imageData: Data?
-    var diary: [Journal] = [] // ✅ Each user has multiple journals
-
+    var diary: [Journal] = []  // ✅ Each user has multiple journals
+    var chats: [ChatMessageModel] = []
 
     init(
         username: String, email: String, password: String,
-        imageData: Data? = nil, diary: [Journal] = []
+        imageData: Data? = nil, diary: [Journal] = [],
+        chats: [ChatMessageModel] = []
     ) {
         self.id = UUID()
         self.username = username
@@ -28,6 +29,7 @@ class User {
         self.password = password
         self.imageData = imageData
         self.diary = diary
+        self.chats = chats
     }
 }
 
@@ -41,5 +43,20 @@ class Journal {
         self.id = UUID()
         self.title = title
         self.summary = summary
+    }
+}
+
+@Model
+class ChatMessageModel {
+    var id: UUID
+    var text: String
+    var isCurrentUser: Bool
+    var date: Date
+
+    init(text: String, isCurrentUser: Bool, date: Date) {
+        self.id = UUID()
+        self.text = text
+        self.isCurrentUser = isCurrentUser
+        self.date = date
     }
 }

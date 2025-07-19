@@ -44,7 +44,7 @@ struct Meditation: View {
             title: "Insomnia yoga",
             desc:
                 "30 min",
-            image: "3"),
+            image: "3")
     ]
 
     var body: some View {
@@ -161,7 +161,7 @@ struct HorizontalListView: View {
                                 ) {
                                     UIApplication.shared.open(url)
                                 }
-                                
+
                             }
 
                         Text(item.title)
@@ -184,4 +184,3 @@ struct HorizontalListView: View {
         }.hideNavBar()
     }
 }
-

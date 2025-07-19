@@ -14,6 +14,7 @@ struct Login: View {
     @State var password = ""
     @State private var showAlert = false
     @State private var alertMessage = ""
+    @Environment(\.dismiss) var dismiss
 
     // var onLoginSuccess: () -> Void
     @State private var goToRegister = false
@@ -71,7 +72,9 @@ struct Login: View {
                         if existingUsers.first != nil {
                             // User exists → go to Home
                             goToHome = true
-                            UserDefaults.standard.set(existingUsers.first?.email, forKey: "loggedInEmail")
+                            UserDefaults.standard.set(
+                                existingUsers.first?.email,
+                                forKey: "loggedInEmail")
                         } else {
                             // No matching user → Show alert
                             alertMessage =
@@ -87,11 +90,28 @@ struct Login: View {
                 }
                 .padding(.top, 36)
                 .padding(.horizontal, 20)
-                .alert(isPresented: $showAlert) {
-                    Alert(
-                        title: Text("Login Failed"),
-                        message: Text(alertMessage),
-                        dismissButton: .default(Text("OK")))
+
+                if showAlert {
+                    CustomAlertModal(
+                        image: Image("info"),
+                        title: alertMessage,
+                        showCancelButton: true,
+                        onNo: {
+                            print("no")
+
+                        },
+                        onYes: {
+                            print("yes")
+
+                        },
+                        onOk: {
+                            print("OK tapped")
+                            dismiss()
+                        },
+                        onDismiss: {
+                            dismiss()
+                        }
+                    )
                 }
 
                 HStack(spacing: 5) {
@@ -115,12 +135,11 @@ struct Login: View {
                         Text("")
                             .hidden()
                     }
-                    
-                  
-//                    NavigationLink(
-//                        "", destination: Home(), isActive: $goToHome
-//                    )
-//                    .hidden()
+
+                    //                    NavigationLink(
+                    //                        "", destination: Home(), isActive: $goToHome
+                    //                    )
+                    //                    .hidden()
 
                 }.padding(.top, 11)
 
@@ -135,4 +154,3 @@ struct Login: View {
 
     }
 }
-

@@ -25,4 +25,3 @@ struct CustomButton: View {
         }
     }
 }
-

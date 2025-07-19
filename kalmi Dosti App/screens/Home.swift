@@ -23,7 +23,7 @@ struct Home: View {
     @State private var goToEditProfile = false
     @State private var goToLogin = false
     @State private var showAlert = false
-    @State private var alertMessage = "Are you sure you want to logout?"
+    @Environment(\.dismiss) var dismiss
 
     // var onLogout: () -> Void
 
@@ -221,25 +221,33 @@ struct Home: View {
                                 }
                                 .padding(5)
                                 .shadow(radius: 2)
-                                .alert(isPresented: $showAlert) {
-                                    Alert(
-                                        title: Text("Logout"),
-                                        message: Text(alertMessage),
-                                        primaryButton: .default(
-                                            Text("OK"),
-                                            action: {
-                                                goToLogin = true
-                                            }),
-                                        secondaryButton: .cancel(
-                                            Text("Cancel"))
-                                    )
-                                }
                                 .navigationDestination(
                                     isPresented: $goToLogin
                                 ) {
                                     Login()
                                     Text("")
                                         .hidden()
+                                }
+
+                                if showAlert {
+                                    CustomAlertModal(
+                                        image: Image("info"),
+                                        title:
+                                            "Are you sure you want to logout?",
+                                        showCancelButton: true,
+                                        onNo: { () -> Void in
+                                            showAlert = false
+                                        },
+                                        onYes: { () -> Void in
+                                            goToLogin = true
+                                        },
+                                        onOk: { () -> Void in
+                                            print("ok")
+                                        },
+                                        onDismiss: { () -> Void in
+                                            showAlert = false
+                                        }
+                                    )
                                 }
 
                             }

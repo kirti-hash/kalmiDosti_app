@@ -5,8 +5,8 @@
 //  Created by kirti rawat on 05/06/25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct Register: View {
 
@@ -19,6 +19,7 @@ struct Register: View {
     @State private var showAlert = false
     @State private var alertMessage = ""
     @Environment(\.modelContext) var modelContext
+    @Environment(\.dismiss) var dismiss
 
     var body: some View {
         ZStack {
@@ -83,64 +84,95 @@ struct Register: View {
                 Spacer()
                 CustomButton(title: "Register", backgroundColor: .faceB5) {
                     // Check for empty fields
-                       if username.isEmpty || password.isEmpty || email.isEmpty || confirmPassword.isEmpty {
-                           alertMessage = "All fields are required."
-                           showAlert = true
-                           return
-                       }
+                    if username.isEmpty || password.isEmpty || email.isEmpty
+                        || confirmPassword.isEmpty
+                    {
+                        alertMessage = "All fields are required."
+                        showAlert = true
+                        return
+                    }
 
-                       // Username validation (only letters and special characters)
-                       let usernameRegex = "^[A-Za-z!@#$%^&*()_+=\\[\\]{}|:;\"'<>,.?/-]+$"
-                       if !NSPredicate(format: "SELF MATCHES %@", usernameRegex).evaluate(with: username) {
-                           alertMessage = "Username can only contain alphabets and special characters."
-                           showAlert = true
-                           return
-                       }
+                    // Username validation (only letters and special characters)
+                    let usernameRegex =
+                        "^[A-Za-z!@#$%^&*()_+=\\[\\]{}|:;\"'<>,.?/-]+$"
+                    if !NSPredicate(format: "SELF MATCHES %@", usernameRegex)
+                        .evaluate(with: username)
+                    {
+                        alertMessage =
+                            "Username can only contain alphabets and special characters."
+                        showAlert = true
+                        return
+                    }
 
-                       // Email validation
-                       let emailRegex = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
-                       if !NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email) {
-                           alertMessage = "Please enter a valid email address."
-                           showAlert = true
-                           return
-                       }
+                    // Email validation
+                    let emailRegex =
+                        "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+                    if !NSPredicate(format: "SELF MATCHES %@", emailRegex)
+                        .evaluate(with: email)
+                    {
+                        alertMessage = "Please enter a valid email address."
+                        showAlert = true
+                        return
+                    }
 
-                       // Password match
-                       if password != confirmPassword {
-                           alertMessage = "Passwords do not match."
-                           showAlert = true
-                           return
-                       }
+                    // Password match
+                    if password != confirmPassword {
+                        alertMessage = "Passwords do not match."
+                        showAlert = true
+                        return
+                    }
 
                     // ✅ Check if user already exists
-                        let descriptor = FetchDescriptor<User>(
-                            predicate: #Predicate { $0.email == email }
-                        )
+                    let descriptor = FetchDescriptor<User>(
+                        predicate: #Predicate { $0.email == email }
+                    )
 
-                        do {
-                            let existingUsers = try modelContext.fetch(descriptor)
-                            if !existingUsers.isEmpty {
-                                alertMessage = "User already exists. Please login instead."
-                                showAlert = true
-                                return
-                            }
-                        } catch {
-                            alertMessage = "Error checking existing users: \(error.localizedDescription)"
+                    do {
+                        let existingUsers = try modelContext.fetch(descriptor)
+                        if !existingUsers.isEmpty {
+                            alertMessage =
+                                "User already exists. Please login instead."
                             showAlert = true
                             return
                         }
+                    } catch {
+                        alertMessage =
+                            "Error checking existing users: \(error.localizedDescription)"
+                        showAlert = true
+                        return
+                    }
 
-                        // ✅ All checks passed → Save user
-                        let newUser = User(username: username, email: email, password: password)
-                        modelContext.insert(newUser)
-                        UserDefaults.standard.set(newUser.email, forKey: "loggedInEmail")
-                        goToHome = true
-                    
+                    // ✅ All checks passed → Save user
+                    let newUser = User(
+                        username: username, email: email, password: password)
+                    modelContext.insert(newUser)
+                    UserDefaults.standard.set(
+                        newUser.email, forKey: "loggedInEmail")
+                    goToHome = true
+
                 }
                 .padding(.top, 36)
                 .padding(.horizontal, 20)
-                .alert(isPresented: $showAlert) {
-                    Alert(title: Text("Registration Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+
+                if showAlert {
+                    CustomAlertModal(
+                        image: Image("info"),
+                        title: alertMessage,
+                        showCancelButton: false,
+                        onNo: {
+                            print("no")
+                        },
+                        onYes: {
+                            print("yes")
+                        },
+                        onOk: {
+                            print("OK tapped")
+                            dismiss()
+                        },
+                        onDismiss: {
+                            dismiss()
+                        }
+                    )
                 }
 
                 HStack(spacing: 5) {
@@ -163,12 +195,11 @@ struct Register: View {
                         Text("")
                             .hidden()
                     }
-                    
 
-//                    NavigationLink(
-//                        "", destination: Login(), isActive: $goToLogin
-//                    )
-//                    .hidden()
+                    //                    NavigationLink(
+                    //                        "", destination: Login(), isActive: $goToLogin
+                    //                    )
+                    //                    .hidden()
 
                 }.padding(.top, 11)
 
@@ -177,4 +208,3 @@ struct Register: View {
 
     }
 }
-
