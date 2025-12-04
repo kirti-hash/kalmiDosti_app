@@ -15,7 +15,9 @@ struct Onboarding: View {
                 startPoint: UnitPoint(x: 0.2, y: 0.3),
                 endPoint: .topTrailing
             )
+            
             .ignoresSafeArea()
+            
             VStack {
                 Spacer()
                 Image("logo")
@@ -33,7 +35,9 @@ struct Onboarding: View {
                     .multilineTextAlignment(.center)
 
             }.padding(.horizontal, 20)
-        }.hideNavBar()
+        }
+        .hideNavBar()
+        .ignoresSafeArea()
 
     }
 }

@@ -41,14 +41,18 @@ struct ConfuseAbout: View {
                     goToNext = true
                     print("Login tapped")
                 }.padding(.top, 20)
-                    .navigationDestination(
-                        isPresented: $goToNext
-                    ) {
-                        ReadyToChat()
-                        Text("")
-                            .hidden()
-                    }
+//                    .navigationDestination(
+//                        isPresented: $goToNext
+//                    ) {
+//                        ReadyToChat()
+//                        Text("")
+//                            .hidden()
+//                    }
 
+                NavigationLink(
+                    "", destination: ReadyToChat(), isActive: $goToNext
+                )
+                .hidden()
                 HStack(spacing: 0) {
                     Spacer()
                     Button(action: {
@@ -60,18 +64,23 @@ struct ConfuseAbout: View {
                     .padding(.trailing, 20)
                     .padding(.bottom, 20)
                     .padding(.top, 8)
-                    .navigationDestination(
-                        isPresented: $goToLogin
-                    ) {
-                        Login()
-                        Text("")
-                            .hidden()
-                    }
-
+//                    .navigationDestination(
+//                        isPresented: $goToLogin
+//                    ) {
+//                        Login()
+//                        Text("")
+//                            .hidden()
+//                    }
+                    NavigationLink(
+                        "", destination: Login(), isActive: $goToLogin
+                    )
                 }
 
-            }.padding(.horizontal, 44)
-        }.hideNavBar()
+            }
+            .padding(.horizontal, 44)
+               
+        }
+        .hideNavBar()
 
     }
 }

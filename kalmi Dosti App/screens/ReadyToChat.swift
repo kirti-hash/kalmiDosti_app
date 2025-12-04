@@ -41,17 +41,11 @@ struct ReadyToChat: View {
                     goToNext = true
                     print("Login tapped")
                 }.padding(.top, 20)
-//                NavigationLink(
-//                    "", destination: Login(), isActive: $goToNext
-//                )
-//                .hidden()
-                    .navigationDestination(
-                        isPresented: $goToNext
-                    ) {
-                        Login()
-                        Text("")
-                            .hidden()
-                    }
+                NavigationLink(
+                    "", destination: Login(), isActive: $goToNext
+                )
+                .hidden()
+               
 
                 HStack(spacing: 0) {
                     Spacer()

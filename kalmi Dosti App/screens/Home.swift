@@ -159,106 +159,118 @@ struct Home: View {
 
                     } else {
                         Spacer()
-                        HStack(spacing: 0) {
-                            VStack(alignment: .leading, spacing: 8) {
-
-                                if let currentUser = matchedUsers.first {
-
-                                    Text("Name: \(currentUser.username)")
-                                        .winkySans(
-                                            size: 15, weight: 500, color: .black
-                                        )
-                                    Text("Email: \(currentUser.email)")
-                                        .winkySans(
-                                            size: 15, weight: 500, color: .black
-                                        )
-                                        .lineLimit(nil)  // allow unlimited lines
-                                        .fixedSize(
-                                            horizontal: false, vertical: true
-                                        )  // wrap text properly
-                                        .multilineTextAlignment(.leading)
-                                        .padding(.trailing, 10)
+                        VStack(alignment: .center){
+                            
+                            HStack(alignment: .center,spacing: 0) {
+                                VStack(alignment: .leading, spacing: 0) {
+                                    
+                                    HStack(){
+                                    if let currentUser = matchedUsers.first {
+                                        
+                                        VStack (alignment: .leading,spacing: 10){
+                                            Text("Name: \(currentUser.username)")
+                                                .winkySans(
+                                                    size: 15, weight: 500, color: .black
+                                                )
+                                                .lineLimit(nil)  // allow unlimited lines
+                                                .fixedSize(
+                                                    horizontal: false, vertical: true
+                                                )  // wrap text properly
+                                                .multilineTextAlignment(.leading)
+                                                .padding(.trailing, 10)
+                                            Text("Email: \(currentUser.email)")
+                                                .winkySans(
+                                                    size: 15, weight: 500, color: .black
+                                                )
+                                                .lineLimit(nil)  // allow unlimited lines
+                                                .fixedSize(
+                                                    horizontal: false, vertical: true
+                                                )  // wrap text properly
+                                                .multilineTextAlignment(.leading)
+                                                .padding(.trailing, 10)
+                                        }
+                                    }
+                                        Spacer()
+                                    // Check if imageData exists
+                                    if let currentUser = matchedUsers.first,
+                                       let imageData = currentUser.imageData,
+                                       let uiImage = UIImage(data: imageData)
+                                    {
+                                        Image(uiImage: uiImage)
+                                            .resizable()
+                                            .frame(width: 80, height: 80)
+                                            .clipShape(Circle())
+                                    } else {
+                                        Image("user")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 80, height: 80)
+                                            .clipShape(Circle())
+                                    }
                                 }
-                                Button(action: {
-                                    // Handle action here (e.g., show modal, toggle view, etc.)
-                                    print("Edit Profile tapped")
-                                    goToEditProfile = true
-                                }) {
-                                    Text("Edit Profile")
-                                        .winkySans(
-                                            size: 15, weight: 400,
-                                            color: .black
-                                        )
-                                        .padding(.horizontal, 20)
-                                        .padding(.vertical, 12)
-                                        .background(Color.faceB5)
-                                        .clipShape(Capsule())
+                                    
+                                    
+                                    Button(action: {
+                                        // Handle action here (e.g., show modal, toggle view, etc.)
+                                        print("Edit Profile tapped")
+                                        goToEditProfile = true
+                                    }) {
+                                        Text("Edit Profile")
+                                            .winkySans(
+                                                size: 15, weight: 400,
+                                                color: .black
+                                            )
+                                            .padding(.horizontal, 20)
+                                            .padding(.vertical, 12)
+                                            .background(Color.faceB5)
+                                            .clipShape(Capsule())
+                                    }
+                                    .padding(10)
+                                    .shadow(radius: 2)
+                                    .padding(.top, 10)
+                                    
+                                    NavigationLink(
+                                        "", destination: EditProfile(), isActive: $goToEditProfile).hidden()
+                                    
+                                    Button(action: {
+                                        // Handle action here (e.g., show modal, toggle view, etc.)
+                                        showAlert = true
+                                    }) {
+                                        Text("Logout")
+                                            .winkySans(
+                                                size: 15, weight: 400,
+                                                color: .black
+                                            )
+                                            .padding(.horizontal, 35)
+                                            .padding(.vertical, 12)
+                                            .background(Color.faceB5)
+                                            .clipShape(Capsule())
+                                    }
+                                    .padding(10)
+                                    .shadow(radius: 2)
+                                  
+                                    
+                                    NavigationLink(
+                                                                           "", destination: Login(), isActive: $goToLogin
+                                                                       ).hidden()
+                                    
+                                    
+                                    
+                                  
+                    
                                 }
-                                .padding(10)
-                                .shadow(radius: 2)
-                                .navigationDestination(
-                                    isPresented: $goToEditProfile
-                                ) {
-                                    EditProfile()
-                                    Text("")
-                                        .hidden()
-                                }
-
-                                Button(action: {
-                                    // Handle action here (e.g., show modal, toggle view, etc.)
-
-                                    showAlert = true
-                                }) {
-                                    Text("Logout")
-                                        .winkySans(
-                                            size: 15, weight: 400,
-                                            color: .black
-                                        )
-                                        .padding(.horizontal, 35)
-                                        .padding(.vertical, 12)
-                                        .background(Color.faceB5)
-                                        .clipShape(Capsule())
-                                }
-                                .padding(5)
-                                .shadow(radius: 2)
-                                .navigationDestination(
-                                    isPresented: $goToLogin
-                                ) {
-                                    Login()
-                                    Text("")
-                                        .hidden()
-                                }
-
+                                
+                                
                             }
-                            Spacer()
-
-                            // Check if imageData exists
-                            if let currentUser = matchedUsers.first,
-                                let imageData = currentUser.imageData,
-                                let uiImage = UIImage(data: imageData)
-                            {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .frame(width: 80, height: 80)
-                                    .clipShape(Circle())
-                            } else {
-                                Image("user")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 80, height: 80)
-                                    .clipShape(Circle())
-                            }
-
+                            .padding(25)
+                            .background(Color.themeGreen.opacity(0.8))
+                            .cornerRadius(25)
+                            .shadow(radius: 3)
+                            .padding(.horizontal, 32)
+                            
                         }
-                        .padding(25)
-                        .frame(height: 223)
-                        .background(Color.themeGreen.opacity(0.8))
-                        .cornerRadius(25)
-                        .shadow(radius: 3)
-                        .padding(.horizontal, 32)
-
+                        
                     }
-
                     Spacer()
                     FloatingBottomTabBar(selectedTab: $selectedTab)
 
@@ -290,6 +302,7 @@ struct Home: View {
                 )
             }
         }
+        .ignoresSafeArea()
         .onAppear {
             if users.isEmpty {
                 print("🔍 No users found in SwiftData.")

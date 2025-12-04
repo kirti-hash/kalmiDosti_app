@@ -42,13 +42,17 @@ struct Welcome: View {
                     print("Login tapped")
                     goToNext = true
                 }.padding(.top, 20)
-                    .navigationDestination(
-                        isPresented: $goToNext
-                    ) {
-                        ConfuseAbout()
-                        Text("")
-                            .hidden()
-                    }
+//                    .navigationDestination(
+//                        isPresented: $goToNext
+//                    ) {
+//                        ConfuseAbout()
+//                        Text("")
+//                            .hidden()
+//                    }
+                NavigationLink(
+                    "", destination: ConfuseAbout(), isActive: $goToNext
+                )
+                .hidden()
 
                 HStack(spacing: 0) {
                     Spacer()
@@ -59,23 +63,25 @@ struct Welcome: View {
                             .winkySans(size: 13, weight: 500, color: .black)
                     }
                     .padding(.trailing, 20)
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 40)
                     .padding(.top, 8)
-                    .navigationDestination(
-                        isPresented: $goToLogin
-                    ) {
-                        Login()
-                        Text("")
-                            .hidden()
-                    }
-                    //                                        NavigationLink(
-                    //                                            "", destination: Login(), isActive: $goToLogin
-                    //                                        )
-                    //                                        .hidden()
+//                    .navigationDestination(
+//                        isPresented: $goToLogin
+//                    ) {
+//                        Login()
+//                        Text("")
+//                            .hidden()
+//                    }
+                    NavigationLink(
+                        "", destination: Login(), isActive: $goToLogin
+                    )
                 }
 
-            }.padding(.horizontal, 44)
-        }.hideNavBar()
+            }
+            .padding(.horizontal, 44)
+        }
+        .ignoresSafeArea()
+        //.hideNavBar()
 
     }
 }

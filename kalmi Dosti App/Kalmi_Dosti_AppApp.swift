@@ -13,6 +13,7 @@ struct Kalmi_Dosti_AppApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .ignoresSafeArea()
         }
         .modelContainer(for: User.self)
     }

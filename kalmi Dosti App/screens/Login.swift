@@ -14,7 +14,7 @@ struct Login: View {
     @State var password = ""
     @State private var showAlert = false
     @State private var alertMessage = ""
-    @Environment(\.dismiss) var dismiss
+   
 
     // var onLoginSuccess: () -> Void
     @State private var goToRegister = false
@@ -91,28 +91,7 @@ struct Login: View {
                 .padding(.top, 36)
                 .padding(.horizontal, 20)
 
-                if showAlert {
-                    CustomAlertModal(
-                        image: Image("info"),
-                        title: alertMessage,
-                        showCancelButton: true,
-                        onNo: {
-                            print("no")
-
-                        },
-                        onYes: {
-                            print("yes")
-
-                        },
-                        onOk: {
-                            print("OK tapped")
-                            dismiss()
-                        },
-                        onDismiss: {
-                            dismiss()
-                        }
-                    )
-                }
+                
 
                 HStack(spacing: 5) {
 
@@ -128,18 +107,18 @@ struct Login: View {
                             .underline()
                     }
                     .padding(.trailing, 20)
-                    .navigationDestination(
-                        isPresented: $goToRegister
-                    ) {
-                        Register()
-                        Text("")
-                            .hidden()
-                    }
+//                    .navigationDestination(
+//                        isPresented: $goToRegister
+//                    ) {
+//                        Register()
+//                        Text("")
+//                            .hidden()
+//                    }
 
-                    //                    NavigationLink(
-                    //                        "", destination: Home(), isActive: $goToHome
-                    //                    )
-                    //                    .hidden()
+                    
+                    NavigationLink(
+                        "", destination: Register(), isActive: $goToRegister)
+                   .hidden()
 
                 }.padding(.top, 11)
 
@@ -150,6 +129,44 @@ struct Login: View {
                     .multilineTextAlignment(.center)
 
             }.padding(.horizontal, 24)
+                .overlay {
+                    if showAlert {
+                        CustomOkAlert(
+                            title: alertMessage,
+                            onOk: {
+                                showAlert = false
+                            },
+                            onDismiss: {
+                                showAlert = false
+                            }
+                        )
+                    }
+                }
+
+            
+//            if showAlert {
+//                CustomAlertModal(
+//                    image: Image("info"),
+//                    title: alertMessage,
+//                    showCancelButton: false,
+//                    onNo: {
+//                        print("no")
+//
+//                    },
+//                    onYes: {
+//                        print("yes")
+//
+//                    },
+//                    onOk: {
+//                        print("OK tapped")
+//                        dismiss()
+//                    },
+//                    onDismiss: {
+//                        dismiss()
+//                    }
+//                )
+//            }
+            
         }.hideNavBar()
 
     }

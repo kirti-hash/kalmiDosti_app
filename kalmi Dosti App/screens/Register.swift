@@ -188,18 +188,18 @@ struct Register: View {
                             .underline()
                     }
                     .padding(.trailing, 20)
-                    .navigationDestination(
-                        isPresented: $goToHome
-                    ) {
-                        Home()
-                        Text("")
-                            .hidden()
-                    }
+//                    .navigationDestination(
+//                        isPresented: $goToHome
+//                    ) {
+//                        Home()
+//                        Text("")
+//                            .hidden()
+//                    }
 
-                    //                    NavigationLink(
-                    //                        "", destination: Login(), isActive: $goToLogin
-                    //                    )
-                    //                    .hidden()
+                                        NavigationLink(
+                                            "", destination: Home(), isActive: $goToHome
+                                        )
+                                        .hidden()
 
                 }.padding(.top, 11)
 
