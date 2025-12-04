@@ -88,6 +88,9 @@ For now, the app showcases:
 - Smooth transitions  
 
 ---![onboardingFlow](https://github.com/user-attachments/assets/543941f1-cfd0-415a-9a6a-5e405c976cea)
+---![home](https://github.com/user-attachments/assets/dfd326f9-9171-442e-a024-be9e19f505d0)
+---![yogaflow](https://github.com/user-attachments/assets/e7f41de7-b0ad-4462-95cf-87d7f3974603)
+
 
 
 ## 🚧 Work in Progress  
