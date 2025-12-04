@@ -87,7 +87,8 @@ For now, the app showcases:
 - Clean typography-based design  
 - Smooth transitions  
 
----
+---![onboardingFlow](https://github.com/user-attachments/assets/543941f1-cfd0-415a-9a6a-5e405c976cea)
+
 
 ## 🚧 Work in Progress  
 This project is actively being developed.  
