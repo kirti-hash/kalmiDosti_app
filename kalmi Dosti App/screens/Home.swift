@@ -229,27 +229,6 @@ struct Home: View {
                                         .hidden()
                                 }
 
-                                if showAlert {
-                                    CustomAlertModal(
-                                        image: Image("info"),
-                                        title:
-                                            "Are you sure you want to logout?",
-                                        showCancelButton: true,
-                                        onNo: { () -> Void in
-                                            showAlert = false
-                                        },
-                                        onYes: { () -> Void in
-                                            goToLogin = true
-                                        },
-                                        onOk: { () -> Void in
-                                            print("ok")
-                                        },
-                                        onDismiss: { () -> Void in
-                                            showAlert = false
-                                        }
-                                    )
-                                }
-
                             }
                             Spacer()
 
@@ -284,9 +263,32 @@ struct Home: View {
                     FloatingBottomTabBar(selectedTab: $selectedTab)
 
                 }
+                
+               
 
             }.hideNavBar()
                 .edgesIgnoringSafeArea(.top)
+            
+            if showAlert {
+                CustomAlertModal(
+                    image: Image("info"),
+                    title:
+                        "Are you sure you want to logout?",
+                    showCancelButton: true,
+                    onNo: { () -> Void in
+                        showAlert = false
+                    },
+                    onYes: { () -> Void in
+                        goToLogin = true
+                    },
+                    onOk: { () -> Void in
+                        print("ok")
+                    },
+                    onDismiss: { () -> Void in
+                        showAlert = false
+                    }
+                )
+            }
         }
         .onAppear {
             if users.isEmpty {

@@ -118,11 +118,15 @@ struct Chat: View {
                             }
                         }
                     }
+                    
+                    
                     //                    .onChange(of: messages.count) { oldmessage, newmessage in
                     //                        withAnimation {
                     //                            proxy.scrollTo(messages.last?.id, anchor: .bottom)
                     //                        }
                     //                    }
+                    
+                    
                 }
 
                 ChatInputView(messageText: $messageText) {
@@ -130,6 +134,8 @@ struct Chat: View {
                 }
             }
             .onAppear {
+                
+                
                 //                if messages.isEmpty, let userName = user?.username {
                 //                    let welcome = "Hi, \(userName)!"
                 //                    messages.append(
@@ -137,6 +143,7 @@ struct Chat: View {
                 //                            text: welcome, isCurrentUser: false, date: Date()))
                 //                }
 
+                
                 if let user = user {
                     if user.chats.isEmpty {
                         let welcome = ChatMessageModel(
@@ -197,6 +204,8 @@ struct Chat: View {
 
     }
 
+    
+    
     func groupedMessages() -> [(key: Date, value: [ChatMessage])] {
         let grouped = Dictionary(grouping: messages) { msg in
             Calendar.current.startOfDay(for: msg.date)
@@ -204,6 +213,8 @@ struct Chat: View {
         return grouped.sorted { $0.key < $1.key }
     }
 
+    
+    
     func sendMessage() {
         let trimmed = messageText.trimmingCharacters(
             in: .whitespacesAndNewlines)
@@ -233,6 +244,8 @@ struct Chat: View {
         }
     }
 
+    
+    
     func callHuggingFace(
         prompt: String, completion: @escaping (String?) -> Void
     ) {
@@ -312,6 +325,8 @@ struct Chat: View {
 
 }
 
+
+
 struct ChatInputView: View {
     @Binding var messageText: String
     var onSend: () -> Void
@@ -342,9 +357,20 @@ struct ChatInputView: View {
 
         }
         .padding(.horizontal)
-
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    
+                }
+            }
+        }
     }
+       
+   
 }
+
+
 
 struct ChatBubble: View {
 
@@ -352,6 +378,7 @@ struct ChatBubble: View {
 
     var body: some View {
         HStack {
+            
             if message.isCurrentUser { Spacer() }
 
             VStack(
@@ -388,6 +415,7 @@ struct ChatBubble: View {
 
     }
 }
+
 
 struct DateSeparator: View {
     let date: Date

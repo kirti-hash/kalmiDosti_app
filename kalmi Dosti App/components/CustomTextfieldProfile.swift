@@ -16,6 +16,7 @@ struct CustomTextfieldProfile: View {
     var cornerRadius: CGFloat = 8
     var borderWidth: CGFloat = 1
     var isPassword: Bool = false
+    var keyboardType: UIKeyboardType = .default
 
     @State private var isSecure: Bool = true
 
@@ -35,6 +36,7 @@ struct CustomTextfieldProfile: View {
                     }
                     .font(.custom("WinkySans", size: 15))
                     .foregroundColor(.black)
+                    .keyboardType(keyboardType)
                     .padding(12)
 
                     if isPassword {
