@@ -10,7 +10,7 @@ import SwiftUI
 struct Welcome: View {
 
     @State private var currentIndex = 0
-    var onLoginSuccess: () -> Void
+    //var onLoginSuccess: () -> Void
     @State private var goToNext = false
     @State private var goToLogin = false
 

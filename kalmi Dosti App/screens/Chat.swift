@@ -120,11 +120,7 @@ struct Chat: View {
                     }
                     
                     
-                    //                    .onChange(of: messages.count) { oldmessage, newmessage in
-                    //                        withAnimation {
-                    //                            proxy.scrollTo(messages.last?.id, anchor: .bottom)
-                    //                        }
-                    //                    }
+                
                     
                     
                 }
@@ -135,19 +131,13 @@ struct Chat: View {
             }
             .onAppear {
                 
-                
-                //                if messages.isEmpty, let userName = user?.username {
-                //                    let welcome = "Hi, \(userName)!"
-                //                    messages.append(
-                //                        ChatMessage(
-                //                            text: welcome, isCurrentUser: false, date: Date()))
-                //                }
+
 
                 
                 if let user = user {
                     if user.chats.isEmpty {
                         let welcome = ChatMessageModel(
-                            text: "Hi, \(user.username)!", isCurrentUser: false,
+                            text: " \(user.username)!", isCurrentUser: false,
                             date: Date())
                         user.chats.append(welcome)
                         messages.append(
@@ -226,103 +216,11 @@ struct Chat: View {
         messageText = ""
         isTyping = true  // Start typing animation
 
-        callHuggingFace(prompt: trimmed) { reply in
-            print("✅ Full raw response:\n\(String(describing: reply))")
-            DispatchQueue.main.async {
-                isTyping = false  // Stop typing animation
-                if let reply = reply {
-                    let botMessage = ChatMessage(
-                        text: reply, isCurrentUser: false, date: Date())
-                    messages.append(botMessage)
-                } else {
-                    messages.append(
-                        ChatMessage(
-                            text: "Something went wrong.", isCurrentUser: false,
-                            date: Date()))
-                }
-            }
-        }
+
     }
 
+
     
-    
-    func callHuggingFace(
-        prompt: String, completion: @escaping (String?) -> Void
-    ) {
-        guard
-            let url = URL(
-                string:
-                    "https://router.huggingface.co/fireworks-ai/inference/v1/chat/completions"
-            )
-        else {
-            completion(nil)
-            return
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue(
-            "Bearer \(Secrets.huggingFaceKey)",
-            forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        let requestBody: [String: Any] = [
-            "model": "accounts/fireworks/models/deepseek-v3",
-            "messages": [
-                ["role": "user", "content": prompt]
-            ],
-            "max_tokens": 1000,
-            "temperature": 0.7,
-            "stream": false,
-        ]
-
-        do {
-            request.httpBody = try JSONSerialization.data(
-                withJSONObject: requestBody, options: [])
-        } catch {
-            print("❌ JSON encoding error: \(error)")
-            completion(nil)
-            return
-        }
-
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("❌ Network error: \(error)")
-                completion(nil)
-                return
-            }
-
-            guard let data = data else {
-                print("❌ No data returned")
-                completion(nil)
-                return
-            }
-
-            do {
-                if let json = try JSONSerialization.jsonObject(with: data)
-                    as? [String: Any],
-                    let choices = json["choices"] as? [[String: Any]],
-                    let message = choices.first?["message"] as? [String: Any],
-                    let reply = message["content"] as? String
-                {
-                    completion(
-                        reply)
-                } else {
-                    let raw =
-                        String(data: data, encoding: .utf8)
-                        ?? "No readable response"
-                    print("❌ Unexpected format:\n\(raw)")
-                    completion(nil)
-                }
-            } catch {
-                let raw =
-                    String(data: data, encoding: .utf8) ?? "No readable string"
-                print("❌ JSON decoding error: \(error)\nRaw:\n\(raw)")
-                completion(nil)
-            }
-        }.resume()
-    }
-
 }
 
 

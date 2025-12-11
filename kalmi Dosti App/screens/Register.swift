@@ -20,6 +20,7 @@ struct Register: View {
     @State private var alertMessage = ""
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
+    @AppStorage("isLoggedIn") var isLoggedIn = false
 
     var body: some View {
         ZStack {
@@ -146,34 +147,44 @@ struct Register: View {
                     let newUser = User(
                         username: username, email: email, password: password)
                     modelContext.insert(newUser)
+                    do {
+                        try modelContext.save()
+                    } catch {
+                        print("Failed to save user: \(error.localizedDescription)")
+                    }
                     UserDefaults.standard.set(
                         newUser.email, forKey: "loggedInEmail")
                     goToHome = true
+                    isLoggedIn = true
 
                 }
                 .padding(.top, 36)
                 .padding(.horizontal, 20)
+                NavigationLink(
+                    "", destination: Home(), isActive: $goToHome
+                 )
+                 .hidden()
 
-                if showAlert {
-                    CustomAlertModal(
-                        image: Image("info"),
-                        title: alertMessage,
-                        showCancelButton: false,
-                        onNo: {
-                            print("no")
-                        },
-                        onYes: {
-                            print("yes")
-                        },
-                        onOk: {
-                            print("OK tapped")
-                            dismiss()
-                        },
-                        onDismiss: {
-                            dismiss()
-                        }
-                    )
-                }
+//                if showAlert {
+//                    CustomAlertModal(
+//                        image: Image("info"),
+//                        title: alertMessage,
+//                        showCancelButton: false,
+//                        onNo: {
+//                            print("no")
+//                        },
+//                        onYes: {
+//                            print("yes")
+//                        },
+//                        onOk: {
+//                            print("OK tapped")
+//                            dismiss()
+//                        },
+//                        onDismiss: {
+//                            dismiss()
+//                        }
+//                    )
+//                }
 
                 HStack(spacing: 5) {
 
@@ -181,7 +192,7 @@ struct Register: View {
                         .winkySans(size: 14, weight: 400, color: .black)
 
                     Button(action: {
-                        goToHome = true
+                        goToLogin = true
                     }) {
                         Text("Login")
                             .winkySans(size: 14, weight: 500, color: .black)
@@ -195,15 +206,27 @@ struct Register: View {
 //                        Text("")
 //                            .hidden()
 //                    }
-
-                                        NavigationLink(
-                                            "", destination: Home(), isActive: $goToHome
-                                        )
-                                        .hidden()
+                    NavigationLink(
+                        "", destination: Login(), isActive: $goToLogin
+                     )
+                     .hidden()
 
                 }.padding(.top, 11)
 
             }.padding(.horizontal, 24)
+                .overlay {
+                    if showAlert {
+                        CustomOkAlert(
+                            title: alertMessage,
+                            onOk: {
+                                showAlert = false
+                            },
+                            onDismiss: {
+                                showAlert = false
+                            }
+                        )
+                    }
+                }
         }.hideNavBar()
 
     }

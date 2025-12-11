@@ -12,6 +12,7 @@ struct ReadyToChat: View {
     @State private var currentIndex = 2
     @State private var goToNext = false
     @State private var goToLogin = false
+    @AppStorage("hasSeenOnboarding") var hasSeenOnboarding = false
 
     var body: some View {
         ZStack {
@@ -39,7 +40,8 @@ struct ReadyToChat: View {
                     .padding(.top, 32)
                 CustomButton(title: "Next", backgroundColor: .faceB5) {
                     goToNext = true
-                    print("Login tapped")
+                    hasSeenOnboarding = true
+                    print("Next tapped")
                 }.padding(.top, 20)
                 NavigationLink(
                     "", destination: Login(), isActive: $goToNext

@@ -14,7 +14,7 @@ struct Login: View {
     @State var password = ""
     @State private var showAlert = false
     @State private var alertMessage = ""
-   
+    @AppStorage("isLoggedIn") var isLoggedIn = false
 
     // var onLoginSuccess: () -> Void
     @State private var goToRegister = false
@@ -59,11 +59,13 @@ struct Login: View {
                 }.padding(.top, 44)
                 CustomButton(title: "Login", backgroundColor: .faceB5) {
                     print("Login tapped")
+                    
+                    let emailTrimmed = email.trimmingCharacters(in: .whitespacesAndNewlines)
+                    let passTrimmed = password.trimmingCharacters(in: .whitespacesAndNewlines)
+                    
                     // Fetch users with matching credentials
                     let descriptor = FetchDescriptor<User>(
-                        predicate: #Predicate {
-                            $0.email == email && $0.password == password
-                        }
+                        predicate: #Predicate { $0.email == emailTrimmed && $0.password == passTrimmed }
                     )
 
                     do {
@@ -72,6 +74,7 @@ struct Login: View {
                         if existingUsers.first != nil {
                             // User exists → go to Home
                             goToHome = true
+                            isLoggedIn = true
                             UserDefaults.standard.set(
                                 existingUsers.first?.email,
                                 forKey: "loggedInEmail")
@@ -81,11 +84,16 @@ struct Login: View {
                                 "User does not exist please register to continue"
                             showAlert = true
                         }
+                        
+                        
+                        
                     } catch {
                         alertMessage =
                             "Error checking login: \(error.localizedDescription)"
                         showAlert = true
                     }
+                    
+                    
 
                 }
                 .padding(.top, 36)
@@ -114,7 +122,10 @@ struct Login: View {
 //                        Text("")
 //                            .hidden()
 //                    }
-
+                    NavigationLink(
+                        "", destination: Home(), isActive: $goToHome
+                     )
+                     .hidden()
                     
                     NavigationLink(
                         "", destination: Register(), isActive: $goToRegister)
@@ -128,6 +139,8 @@ struct Login: View {
                     .winkySans(size: 13, weight: 400, color: .black)
                     .multilineTextAlignment(.center)
 
+                
+                
             }.padding(.horizontal, 24)
                 .overlay {
                     if showAlert {

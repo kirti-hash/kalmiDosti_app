@@ -10,36 +10,34 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @State private var isLoggedIn = false
-    @State private var showSplash = true
+    @AppStorage("hasSeenOnboarding") var hasSeenOnboarding = false
+    @AppStorage("isLoggedIn") var isLoggedIn = false
+    @State private var showSplash: Bool = true
     @Query var items: [User]
 
     var body: some View {
         NavigationStack {
+            
+
             if showSplash {
-                Splash()
-                    .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            // Check login state or move to auth
-                            showSplash = false
-                            isLoggedIn = UserDefaults.standard.bool(
-                                forKey: "isLoggedIn")
-                        }
+                        Splash()
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                    withAnimation {
+                                        showSplash = false
+                                    }
+                                }
+                            }
                     }
-            } else {
-                if isLoggedIn {
-                    Home(//                                onLogout: {
-                    //                                isLoggedIn = false
-                    //                                UserDefaults.standard.set(false, forKey: "isLoggedIn")
-                    //                            }
-                    )
-                } else {
-                    Welcome(onLoginSuccess: {
-                        isLoggedIn = true
-                        UserDefaults.standard.set(true, forKey: "isLoggedIn")
-                    })
-                }
+                    else if !hasSeenOnboarding {
+                Welcome()
+            } else if !isLoggedIn {
+                Login()
+            }  else {
+                Home()
             }
+            
+            
         }.toolbar(.hidden, for: .automatic)
     }
 }

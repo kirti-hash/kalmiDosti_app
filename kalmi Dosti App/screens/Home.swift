@@ -24,6 +24,7 @@ struct Home: View {
     @State private var goToLogin = false
     @State private var showAlert = false
     @Environment(\.dismiss) var dismiss
+    @AppStorage("isLoggedIn") var isLoggedIn = false
 
     // var onLogout: () -> Void
 
@@ -292,6 +293,7 @@ struct Home: View {
                     },
                     onYes: { () -> Void in
                         goToLogin = true
+                        isLoggedIn = false
                     },
                     onOk: { () -> Void in
                         print("ok")

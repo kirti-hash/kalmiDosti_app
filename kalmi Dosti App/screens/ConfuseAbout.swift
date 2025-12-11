@@ -39,7 +39,7 @@ struct ConfuseAbout: View {
                     .padding(.top, 32)
                 CustomButton(title: "Next", backgroundColor: .faceB5) {
                     goToNext = true
-                    print("Login tapped")
+                    print("Next tapped")
                 }.padding(.top, 20)
 //                    .navigationDestination(
 //                        isPresented: $goToNext

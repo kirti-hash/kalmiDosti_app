@@ -10,6 +10,12 @@ import SwiftUI
 
 @main
 struct Kalmi_Dosti_AppApp: App {
+    
+    @AppStorage("hasSeenOnboarding") var hasSeenOnboarding: Bool = false
+    @AppStorage("isLoggedIn") var isLoggedIn: Bool = false
+    
+  
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
