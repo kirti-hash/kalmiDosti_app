@@ -100,7 +100,5 @@ Upcoming UI features include:
 - Animated interactions  
 - Backend integration (later stage)  
 
----
-
-## 📂 Folder Structure (Simplified)
+---)
 
